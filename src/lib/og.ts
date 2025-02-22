@@ -4,7 +4,7 @@ type OpenGraphType = {
   templateTitle?: string;
   logo?: string;
 };
-const ogDomain = 'og.<your-domain>';
+const ogDomain = process.env.NEXT_PUBLIC_OG_DOMAIN || 'og.<your-domain>';
 // !STARTERCONF This OG is generated from https://github.com/ibsanju/og
 // Please clone them and self-host if your site is going to be visited by many people.
 // Then change the url and the default logo.
