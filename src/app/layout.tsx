@@ -56,6 +56,13 @@ export default function RootLayout({
 }) {
   return (
     <html>
+      <head>
+        <script
+          defer
+          src='https://umami.revab.dev/script.js'
+          data-website-id='633b9104-c583-4289-b178-64466705d476'
+        ></script>
+      </head>
       <body>{children}</body>
     </html>
   );
