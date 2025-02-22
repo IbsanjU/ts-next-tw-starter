@@ -1,7 +1,8 @@
-import { LucideIcon } from 'lucide-react';
+'use client';
+
+import { Loader, type LucideIcon } from 'lucide-react';
 import * as React from 'react';
-import { IconType } from 'react-icons';
-import { ImSpinner2 } from 'react-icons/im';
+import type { IconType } from 'react-icons';
 
 import { cn } from '@/lib/utils';
 
@@ -13,11 +14,13 @@ const IconButtonVariant = [
   'dark',
 ] as const;
 
+type IconComponent = IconType | LucideIcon;
+
 type IconButtonProps = {
   isLoading?: boolean;
   isDarkBg?: boolean;
   variant?: (typeof IconButtonVariant)[number];
-  icon?: IconType | LucideIcon;
+  icon?: IconComponent;
   classNames?: {
     icon?: string;
   };
@@ -39,6 +42,18 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
   ) => {
     const disabled = isLoading || buttonDisabled;
 
+    const renderIcon = (
+      Icon: IconComponent | undefined,
+      className?: string
+    ) => {
+      if (!Icon) return null;
+      const IconComponent = Icon as React.FC<{
+        size?: string | number;
+        className?: string;
+      }>;
+      return <IconComponent size='1em' className={className} />;
+    };
+
     return (
       <button
         ref={ref}
@@ -50,7 +65,6 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
           'shadow-sm',
           'transition-colors duration-75',
           'min-h-[28px] min-w-[28px] p-1 md:min-h-[34px] md:min-w-[34px] md:p-2',
-          //#region  //*=========== Variants ===========
           [
             variant === 'primary' && [
               'bg-primary-500 text-white',
@@ -85,7 +99,6 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
               'hover:bg-gray-800 active:bg-gray-700 disabled:bg-gray-700',
             ],
           ],
-          //#endregion  //*======== Variants ===========
           'disabled:cursor-not-allowed',
           isLoading &&
             'relative text-transparent transition-none hover:text-transparent disabled:cursor-wait',
@@ -104,10 +117,10 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
               }
             )}
           >
-            <ImSpinner2 className='animate-spin' />
+            <Loader className='animate-spin' />
           </div>
         )}
-        {Icon && <Icon size='1em' className={cn(classNames?.icon)} />}
+        {Icon && renderIcon(Icon, cn(classNames?.icon))}
       </button>
     );
   }

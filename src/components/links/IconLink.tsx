@@ -1,6 +1,8 @@
-import { LucideIcon } from 'lucide-react';
+'use client';
+
+import { type LucideIcon } from 'lucide-react';
 import * as React from 'react';
-import { IconType } from 'react-icons';
+import type { IconType } from 'react-icons';
 
 import { cn } from '@/lib/utils';
 
@@ -15,6 +17,13 @@ const IconLinkVariant = [
   'light',
   'dark',
 ] as const;
+
+// Add type assertion function
+function assertIcon(
+  icon: IconType | LucideIcon
+): asserts icon is React.FC<{ size?: string | number; className?: string }> {
+  // Type assertion only - no runtime impact
+}
 
 type IconLinkProps = {
   isDarkBg?: boolean;
@@ -37,6 +46,12 @@ const IconLink = React.forwardRef<HTMLAnchorElement, IconLinkProps>(
     },
     ref
   ) => {
+    const renderIcon = () => {
+      if (!Icon) return null;
+      assertIcon(Icon);
+      return <Icon size='1em' className={cn(classNames?.icon)} />;
+    };
+
     return (
       <UnstyledLink
         ref={ref}
@@ -47,7 +62,6 @@ const IconLink = React.forwardRef<HTMLAnchorElement, IconLinkProps>(
           'shadow-sm',
           'transition-colors duration-75',
           'min-h-[28px] min-w-[28px] p-1 md:min-h-[34px] md:min-w-[34px] md:p-2',
-          //#region  //*=========== Variants ===========
           [
             variant === 'primary' && [
               'bg-primary-500 text-white',
@@ -82,13 +96,12 @@ const IconLink = React.forwardRef<HTMLAnchorElement, IconLinkProps>(
               'hover:bg-gray-800 active:bg-gray-700 disabled:bg-gray-700',
             ],
           ],
-          //#endregion  //*======== Variants ===========
           'disabled:cursor-not-allowed',
           className
         )}
         {...rest}
       >
-        {Icon && <Icon size='1em' className={cn(classNames?.icon)} />}
+        {renderIcon()}
       </UnstyledLink>
     );
   }

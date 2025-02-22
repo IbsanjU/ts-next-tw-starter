@@ -1,8 +1,7 @@
-'use client'; // Error components must be Client Components
+'use client';
 
+import { AlertTriangle } from 'lucide-react';
 import * as React from 'react';
-import { IconType } from 'react-icons';
-import { RiAlarmWarningFill } from 'react-icons/ri';
 
 import TextButton from '@/components/buttons/TextButton';
 
@@ -18,13 +17,11 @@ export default function Error({
     console.error(error);
   }, [error]);
 
-  const WarningIcon = RiAlarmWarningFill as IconType;
-
   return (
     <main>
       <section className='bg-white'>
         <div className='layout flex min-h-screen flex-col items-center justify-center text-center text-black'>
-          <WarningIcon
+          <AlertTriangle
             size={60}
             className='drop-shadow-glow animate-flicker text-red-500'
           />

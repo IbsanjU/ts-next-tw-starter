@@ -1,6 +1,8 @@
-import { LucideIcon } from 'lucide-react';
+'use client';
+
+import { type LucideIcon } from 'lucide-react';
 import * as React from 'react';
-import { IconType } from 'react-icons';
+import type { IconType } from 'react-icons';
 
 import { cn } from '@/lib/utils';
 
@@ -16,6 +18,13 @@ const ButtonLinkVariant = [
   'dark',
 ] as const;
 const ButtonLinkSize = ['sm', 'base'] as const;
+
+// Add type assertion function
+function assertIcon(
+  icon: IconType | LucideIcon
+): asserts icon is React.FC<{ size?: string | number; className?: string }> {
+  // Type assertion only - no runtime impact
+}
 
 type ButtonLinkProps = {
   isDarkBg?: boolean;
@@ -44,6 +53,15 @@ const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
     },
     ref
   ) => {
+    const renderIcon = (
+      Icon: IconType | LucideIcon | undefined,
+      iconClassName: string
+    ) => {
+      if (!Icon) return null;
+      assertIcon(Icon);
+      return <Icon size='1em' className={iconClassName} />;
+    };
+
     return (
       <UnstyledLink
         ref={ref}
@@ -53,7 +71,6 @@ const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
           'focus-visible:ring-primary-500 focus:outline-none focus-visible:ring',
           'shadow-sm',
           'transition-colors duration-75',
-          //#region  //*=========== Size ===========
           [
             size === 'base' && ['px-3 py-1.5', 'text-sm md:text-base'],
             size === 'sm' && ['px-2 py-1', 'text-xs md:text-sm'],
@@ -106,16 +123,16 @@ const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
               size === 'sm' && 'mr-1.5',
             ])}
           >
-            <LeftIcon
-              size='1em'
-              className={cn(
+            {renderIcon(
+              LeftIcon,
+              cn(
                 [
                   size === 'base' && 'md:text-md text-md',
                   size === 'sm' && 'md:text-md text-sm',
                 ],
                 classNames?.leftIcon
-              )}
-            />
+              )
+            )}
           </div>
         )}
         {children}
@@ -126,16 +143,16 @@ const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
               size === 'sm' && 'ml-1.5',
             ])}
           >
-            <RightIcon
-              size='1em'
-              className={cn(
+            {renderIcon(
+              RightIcon,
+              cn(
                 [
                   size === 'base' && 'text-md md:text-md',
                   size === 'sm' && 'md:text-md text-sm',
                 ],
                 classNames?.rightIcon
-              )}
-            />
+              )
+            )}
           </div>
         )}
       </UnstyledLink>

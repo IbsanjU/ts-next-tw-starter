@@ -1,20 +1,23 @@
-import { LucideIcon } from 'lucide-react';
+'use client';
+
+import { Loader, type LucideIcon } from 'lucide-react';
 import * as React from 'react';
-import { IconType } from 'react-icons';
-import { ImSpinner2 } from 'react-icons/im';
+import type { IconType } from 'react-icons';
 
 import { cn } from '@/lib/utils';
 
 const ButtonVariant = ['primary', 'outline', 'ghost', 'light', 'dark'] as const;
 const ButtonSize = ['sm', 'base'] as const;
 
+type IconComponent = IconType | LucideIcon;
+
 type ButtonProps = {
   isLoading?: boolean;
   isDarkBg?: boolean;
   variant?: (typeof ButtonVariant)[number];
   size?: (typeof ButtonSize)[number];
-  leftIcon?: IconType | LucideIcon;
-  rightIcon?: IconType | LucideIcon;
+  leftIcon?: IconComponent;
+  rightIcon?: IconComponent;
   classNames?: {
     leftIcon?: string;
     rightIcon?: string;
@@ -40,6 +43,18 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     const disabled = isLoading || buttonDisabled;
 
+    const renderIcon = (
+      Icon: IconComponent | undefined,
+      className?: string
+    ) => {
+      if (!Icon) return null;
+      const IconComponent = Icon as React.FC<{
+        size?: string | number;
+        className?: string;
+      }>;
+      return <IconComponent size='1em' className={className} />;
+    };
+
     return (
       <button
         ref={ref}
@@ -50,13 +65,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           'focus-visible:ring-primary-500 focus:outline-none focus-visible:ring',
           'shadow-sm',
           'transition-colors duration-75',
-          //#region  //*=========== Size ===========
           [
             size === 'base' && ['px-3 py-1.5', 'text-sm md:text-base'],
             size === 'sm' && ['px-2 py-1', 'text-xs md:text-sm'],
           ],
-          //#endregion  //*======== Size ===========
-          //#region  //*=========== Variants ===========
           [
             variant === 'primary' && [
               'bg-primary-500 text-white',
@@ -91,7 +103,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               'hover:bg-gray-800 active:bg-gray-700 disabled:bg-gray-700',
             ],
           ],
-          //#endregion  //*======== Variants ===========
           'disabled:cursor-not-allowed',
           isLoading &&
             'relative text-transparent transition-none hover:text-transparent disabled:cursor-wait',
@@ -110,7 +121,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               }
             )}
           >
-            <ImSpinner2 className='animate-spin' />
+            <Loader className='animate-spin' />
           </div>
         )}
         {LeftIcon && (
@@ -120,16 +131,16 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               size === 'sm' && 'mr-1.5',
             ])}
           >
-            <LeftIcon
-              size='1em'
-              className={cn(
+            {renderIcon(
+              LeftIcon,
+              cn(
                 [
                   size === 'base' && 'md:text-md text-md',
                   size === 'sm' && 'md:text-md text-sm',
                 ],
                 classNames?.leftIcon
-              )}
-            />
+              )
+            )}
           </div>
         )}
         {children}
@@ -140,16 +151,16 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               size === 'sm' && 'ml-1.5',
             ])}
           >
-            <RightIcon
-              size='1em'
-              className={cn(
+            {renderIcon(
+              RightIcon,
+              cn(
                 [
                   size === 'base' && 'text-md md:text-md',
                   size === 'sm' && 'md:text-md text-sm',
                 ],
                 classNames?.rightIcon
-              )}
-            />
+              )
+            )}
           </div>
         )}
       </button>
