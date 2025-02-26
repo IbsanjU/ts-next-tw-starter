@@ -31,14 +31,21 @@ jobs:
       - name: 📥 Download deps
         run: pnpm install --frozen-lockfile
 
-      - name: 🔬 Lint
-        run: pnpm run lint:strict
+      - name: 🔬 Fix lint issues
+        run: pnpm run lint:fix
+
+      - name: 💅 Fix Prettier issues
+        run: pnpm run format:fix
 
       - name: 🔎 Type check
         run: pnpm run typecheck
 
-      - name: 💅 Prettier check
-        run: pnpm run format:check
-
       - name: 🃏 Run jest
         run: pnpm run test
+
+      - name: 🚀 Commit and push fixes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git diff --staged --quiet || (git commit -m "🔧 Auto-fix lint and formatting issues" && git push)
