@@ -15,9 +15,9 @@
 
 This repository is 🔋 battery packed with:
 
-- ⚡️ Next.js 14 with App Router
-- ⚛️ React 18
-- ✨ TypeScript
+- ⚡️ Next.js 15 with App Router
+- ⚛️ React 19
+- ✨ TypeScript 5
 - 💨 Tailwind CSS 3 — Configured with CSS Variables to extend the **primary** color
 - 💎 Pre-built Components — Components that will **automatically adapt** with your brand color, [check here for the demo](https://tsnext-tw.revab.dev/components)
 - 🃏 Jest — Configured for unit testing
