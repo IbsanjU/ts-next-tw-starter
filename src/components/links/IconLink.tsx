@@ -10,7 +10,7 @@ import UnstyledLink, {
   UnstyledLinkProps,
 } from '@/components/links/UnstyledLink';
 
-const IconLinkVariant = [
+const _IconLinkVariant = [
   'primary',
   'outline',
   'ghost',
@@ -18,16 +18,9 @@ const IconLinkVariant = [
   'dark',
 ] as const;
 
-// Add type assertion function
-function assertIcon(
-  icon: IconType | LucideIcon
-): asserts icon is React.FC<{ size?: string | number; className?: string }> {
-  // Type assertion only - no runtime impact
-}
-
 type IconLinkProps = {
   isDarkBg?: boolean;
-  variant?: (typeof IconLinkVariant)[number];
+  variant?: (typeof _IconLinkVariant)[number];
   icon?: IconType | LucideIcon;
   classNames?: {
     icon?: string;
@@ -44,12 +37,15 @@ const IconLink = React.forwardRef<HTMLAnchorElement, IconLinkProps>(
       classNames,
       ...rest
     },
-    ref
+    ref,
   ) => {
     const renderIcon = () => {
       if (!Icon) return null;
-      assertIcon(Icon);
-      return <Icon size='1em' className={cn(classNames?.icon)} />;
+      const IconComponent = Icon as React.ComponentType<{
+        size?: string | number;
+        className?: string;
+      }>;
+      return <IconComponent size='1em' className={cn(classNames?.icon)} />;
     };
 
     return (
@@ -97,14 +93,14 @@ const IconLink = React.forwardRef<HTMLAnchorElement, IconLinkProps>(
             ],
           ],
           'disabled:cursor-not-allowed',
-          className
+          className,
         )}
         {...rest}
       >
         {renderIcon()}
       </UnstyledLink>
     );
-  }
+  },
 );
 
 export default IconLink;

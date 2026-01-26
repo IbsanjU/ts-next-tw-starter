@@ -6,7 +6,7 @@ import type { IconType } from 'react-icons';
 
 import { cn } from '@/lib/utils';
 
-const IconButtonVariant = [
+const _IconButtonVariant = [
   'primary',
   'outline',
   'ghost',
@@ -19,7 +19,7 @@ type IconComponent = IconType | LucideIcon;
 type IconButtonProps = {
   isLoading?: boolean;
   isDarkBg?: boolean;
-  variant?: (typeof IconButtonVariant)[number];
+  variant?: (typeof _IconButtonVariant)[number];
   icon?: IconComponent;
   classNames?: {
     icon?: string;
@@ -38,13 +38,13 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
       classNames,
       ...rest
     },
-    ref
+    ref,
   ) => {
     const disabled = isLoading || buttonDisabled;
 
     const renderIcon = (
       Icon: IconComponent | undefined,
-      className?: string
+      className?: string,
     ) => {
       if (!Icon) return null;
       const IconComponent = Icon as React.FC<{
@@ -102,7 +102,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
           'disabled:cursor-not-allowed',
           isLoading &&
             'relative text-transparent transition-none hover:text-transparent disabled:cursor-wait',
-          className
+          className,
         )}
         {...rest}
       >
@@ -114,7 +114,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
                 'text-white': ['primary', 'dark'].includes(variant),
                 'text-black': ['light'].includes(variant),
                 'text-primary-500': ['outline', 'ghost'].includes(variant),
-              }
+              },
             )}
           >
             <Loader className='animate-spin' />
@@ -123,7 +123,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
         {Icon && renderIcon(Icon, cn(classNames?.icon))}
       </button>
     );
-  }
+  },
 );
 
 export default IconButton;

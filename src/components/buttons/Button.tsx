@@ -6,16 +6,22 @@ import type { IconType } from 'react-icons';
 
 import { cn } from '@/lib/utils';
 
-const ButtonVariant = ['primary', 'outline', 'ghost', 'light', 'dark'] as const;
-const ButtonSize = ['sm', 'base'] as const;
+const _ButtonVariant = [
+  'primary',
+  'outline',
+  'ghost',
+  'light',
+  'dark',
+] as const;
+const _ButtonSize = ['sm', 'base'] as const;
 
 type IconComponent = IconType | LucideIcon;
 
 type ButtonProps = {
   isLoading?: boolean;
   isDarkBg?: boolean;
-  variant?: (typeof ButtonVariant)[number];
-  size?: (typeof ButtonSize)[number];
+  variant?: (typeof _ButtonVariant)[number];
+  size?: (typeof _ButtonSize)[number];
   leftIcon?: IconComponent;
   rightIcon?: IconComponent;
   classNames?: {
@@ -39,13 +45,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       classNames,
       ...rest
     },
-    ref
+    ref,
   ) => {
     const disabled = isLoading || buttonDisabled;
 
     const renderIcon = (
       Icon: IconComponent | undefined,
-      className?: string
+      className?: string,
     ) => {
       if (!Icon) return null;
       const IconComponent = Icon as React.FC<{
@@ -106,7 +112,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           'disabled:cursor-not-allowed',
           isLoading &&
             'relative text-transparent transition-none hover:text-transparent disabled:cursor-wait',
-          className
+          className,
         )}
         {...rest}
       >
@@ -118,7 +124,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
                 'text-white': ['primary', 'dark'].includes(variant),
                 'text-black': ['light'].includes(variant),
                 'text-primary-500': ['outline', 'ghost'].includes(variant),
-              }
+              },
             )}
           >
             <Loader className='animate-spin' />
@@ -138,8 +144,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
                   size === 'base' && 'md:text-md text-md',
                   size === 'sm' && 'md:text-md text-sm',
                 ],
-                classNames?.leftIcon
-              )
+                classNames?.leftIcon,
+              ),
             )}
           </div>
         )}
@@ -158,14 +164,14 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
                   size === 'base' && 'text-md md:text-md',
                   size === 'sm' && 'md:text-md text-sm',
                 ],
-                classNames?.rightIcon
-              )
+                classNames?.rightIcon,
+              ),
             )}
           </div>
         )}
       </button>
     );
-  }
+  },
 );
 
 export default Button;
